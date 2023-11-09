@@ -18,7 +18,7 @@ if [[ $# -ge 3 ]]; then
   if [[ "$3" == *\/* ]] || [[ -d "$3" ]]; then
     target_directory="$3"
     # Create the target directory if it doesn't exist
-    [[ ! -d "$target_directory" ]] && mkdir -p "$target_directory"
+    [[ ! -d "$target_directory" ]] && echo "Copying to $target_directory..." && mkdir -p "$target_directory"
   else
     IFS=',' read -r -a extensions <<< "$3"
   fi
@@ -57,11 +57,13 @@ find "$source_directory" -type f -print0 | while IFS= read -r -d $'\0' file; do
   fi
   # Check if file does not exist in the comparison directory
   if [ ! -f "$comparison_directory/$filename" ]; then
-    echo "Missing file: $filename"
     # Copy the file if target directory is provided
-    if [[ ! -z $target_directory ]]; then
-      echo "Copying..."
+    if [[ -n $target_directory ]]; then
+      echo "Copying missing file: $filename"
       cp "$file" "$target_directory"
+    else
+      # Otherwise, report the missing file
+      echo "Missing file: $filename"
     fi
   fi
 done
