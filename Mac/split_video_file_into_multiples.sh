@@ -13,5 +13,6 @@ while IFS= read -r line; do
     end=$(echo "$line" | awk '{print $2}')
     output=$(echo "$line" | awk '{print $3}')
     
-    ffmpeg -i "$INPUT_FILE" -ss "$start" -to "$end" -c copy "$output"
+    # Split the video stream only, ignoring audio
+    ffmpeg -ss "$start" -to "$end" -i "$INPUT_FILE" -c:v copy -c:a copy "$output"
 done < "$TIMESTAMP_FILE"
