@@ -1,7 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-INPUT_FILE="input.mp3"
-TIMESTAMP_FILE="timestamps.txt"
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <input_file> <timestamp_file>"
+    exit 1
+fi
+
+INPUT_FILE="$1"
+TIMESTAMP_FILE="$2"
 
 while IFS= read -r line; do
     start=$(echo "$line" | awk '{print $1}')
