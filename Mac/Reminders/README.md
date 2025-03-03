@@ -50,3 +50,19 @@ brew install curl
 #### curl_hitEachInFile.sh
 
 Uses `xargs` and `curl` to hit each URL present in a file named `urls.txt` to `~/Downloads/`. Technically doesn't need to be a download target, though that was the designed use case. Uses four degrees of parallelism.
+
+### FFMPEG
+
+#### Prerew
+
+```shell
+brew install ffmpeg
+```
+
+#### ffmpeg_convertMP4ToMKV.sh
+
+Uses `ffmpeg`, `ls`, and `xargs` to convert every MP4 file in a directory from MP4 to MKV.
+
+#### ffmpeg_convertMKVToMP4.sh
+
+Uses `ffmpeg`, `ls`, and `xargs` to convert every MKV file in a directory from MKV to MP4.
