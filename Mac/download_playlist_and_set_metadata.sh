@@ -1,15 +1,27 @@
 #!/bin/bash
 
 # Script to download a YouTube playlist as MP3 files and add ID3 metadata
-# Usage: ./download_playlist_and_set_metadata.sh <URL> <artist> <genre> <album> <num_tracks>
+# Usage: ./download_playlist_and_set_metadata.sh <URL> <artist> <genre> <album> <num_tracks> [start_track_num]
 
 # Check if correct number of parameters provided
-if [ "$#" -ne 5 ]; then
+if [ "$#" -lt 5 ] || [ "$#" -gt 6 ]; then
     echo "Error: Incorrect number of parameters"
-    echo "Usage: $0 <URL> <artist> <genre> <album> <num_tracks>"
+    echo "Usage: $0 <URL> <artist> <genre> <album> <num_tracks> [start_track_num]"
     echo ""
-    echo "Example:"
+    echo "Parameters:"
+    echo "  URL              - YouTube playlist URL"
+    echo "  artist           - Artist name for metadata"
+    echo "  genre            - Genre for metadata"
+    echo "  album            - Album name for metadata"
+    echo "  num_tracks       - Total track count for metadata (e.g., 38 for a 38-track album)"
+    echo "  start_track_num  - (Optional) Starting track number (defaults to 1)"
+    echo ""
+    echo "Examples:"
+    echo "  # Download playlist as tracks 1-10"
     echo "  $0 'https://youtube.com/playlist?list=...' 'Artist Name' 'Rock' 'Album Name' 10"
+    echo ""
+    echo "  # Download playlist as tracks 18-38 (continuing an existing album)"
+    echo "  $0 'https://youtube.com/playlist?list=...' 'Artist Name' 'Rock' 'Album Name' 38 18"
     exit 1
 fi
 
@@ -19,10 +31,17 @@ ARTIST="$2"
 GENRE="$3"
 ALBUM="$4"
 NUM_TRACKS="$5"
+START_TRACK_NUM="${6:-1}"  # Default to 1 if not provided
 
 # Validate num_tracks is a number
 if ! [[ "$NUM_TRACKS" =~ ^[0-9]+$ ]]; then
     echo "Error: num_tracks must be a positive number"
+    exit 1
+fi
+
+# Validate start_track_num is a number
+if ! [[ "$START_TRACK_NUM" =~ ^[0-9]+$ ]]; then
+    echo "Error: start_track_num must be a positive number"
     exit 1
 fi
 
@@ -34,6 +53,7 @@ echo "Artist: $ARTIST"
 echo "Genre: $GENRE"
 echo "Album: $ALBUM"
 echo "Total Tracks: $NUM_TRACKS"
+echo "Starting Track Number: $START_TRACK_NUM"
 echo "========================================="
 echo ""
 
@@ -52,13 +72,9 @@ echo "Found $video_count videos in playlist"
 echo ""
 
 # Step 2: Download and tag each video individually
-track_num=1
+track_num=$START_TRACK_NUM
 successful_downloads=0
 while IFS= read -r video_url; do
-    # Stop if we've processed the requested number of tracks
-    if [ $track_num -gt $NUM_TRACKS ]; then
-        break
-    fi
     
     echo "========================================="
     echo "Processing track $track_num/$NUM_TRACKS"
@@ -119,5 +135,5 @@ done <<< "$playlist_urls"
 
 echo "========================================="
 echo "Process complete!"
-echo "Successfully downloaded and tagged $successful_downloads out of $NUM_TRACKS files"
+echo "Successfully downloaded and tagged $successful_downloads files"
 echo "========================================="

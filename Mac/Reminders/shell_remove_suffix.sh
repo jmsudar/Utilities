@@ -1,2 +1,2 @@
-echo 'Copied to clipboard: suffix=""; for f in *.ext; do base="${f%$suffix.ext}"; mv "$f" "$base.ext"; done'
-echo 'suffix=""; for f in *.ext; do base="${f%$suffix.ext}"; mv "$f" "$base.ext"; done' | pbcopy
+echo 'Copied to clipboard: ext=""; suffix=""; for f in *$ext; do base="${f%$ext}"; newbase="${base%$suffix}"; mv "$f" "$newbase$ext"; done'
+echo 'ext=""; suffix=""; for f in *$ext; do base="${f%$ext}"; newbase="${base%$suffix}"; mv "$f" "$newbase$ext"; done' | pbcopy
