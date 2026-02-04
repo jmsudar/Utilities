@@ -1,0 +1,8 @@
+echo 'ctrl + a | Beginning of line'
+echo 'ctrl + e | End of line'
+echo 'ctrl + f | Forward one word'
+echo 'ctrl + b | Backward one word'
+echo 'ctrl + u | Delete from cursor to beginning of line'
+echo 'ctrl + k | Delete from cursor to end of line'
+echo 'ctrl + w | Delete word before cursor'
+echo 'ctrl + d | Delete word after cursor'
