@@ -4,15 +4,16 @@
 # Usage: ./download_playlist_and_set_metadata.sh <URL> <artist> <genre> <album> <num_tracks> [start_track_num]
 
 # Check if correct number of parameters provided
-if [ "$#" -lt 5 ] || [ "$#" -gt 6 ]; then
+if [ "$#" -lt 6 ] || [ "$#" -gt 7 ]; then
     echo "Error: Incorrect number of parameters"
-    echo "Usage: $0 <URL> <artist> <genre> <album> <num_tracks> [start_track_num]"
+    echo "Usage: $0 <URL> <artist> <genre> <album> <year> <num_tracks> [start_track_num]"
     echo ""
     echo "Parameters:"
     echo "  URL              - YouTube playlist URL"
     echo "  artist           - Artist name for metadata"
     echo "  genre            - Genre for metadata"
     echo "  album            - Album name for metadata"
+    echo "  year             - Album release year for metadata"
     echo "  num_tracks       - Total track count for metadata (e.g., 38 for a 38-track album)"
     echo "  start_track_num  - (Optional) Starting track number (defaults to 1)"
     echo ""
@@ -30,8 +31,9 @@ URL="$1"
 ARTIST="$2"
 GENRE="$3"
 ALBUM="$4"
-NUM_TRACKS="$5"
-START_TRACK_NUM="${6:-1}"  # Default to 1 if not provided
+YEAR="$5"
+NUM_TRACKS="$6"
+START_TRACK_NUM="${7:-1}"  # Default to 1 if not provided
 
 # Validate num_tracks is a number
 if ! [[ "$NUM_TRACKS" =~ ^[0-9]+$ ]]; then
@@ -52,6 +54,7 @@ echo "URL: $URL"
 echo "Artist: $ARTIST"
 echo "Genre: $GENRE"
 echo "Album: $ALBUM"
+echo "Year: $YEAR"
 echo "Total Tracks: $NUM_TRACKS"
 echo "Starting Track Number: $START_TRACK_NUM"
 echo "========================================="
@@ -120,7 +123,7 @@ while IFS= read -r video_url; do
     
     # Apply metadata
     echo "Applying metadata..."
-    id3v2 --artist "$ARTIST" --genre "$GENRE" --album "$ALBUM" --track "$track_num/$NUM_TRACKS" "$final_filename"
+    id3v2 --artist "$ARTIST" --genre "$GENRE" --album "$ALBUM" --year "$YEAR" --track "$track_num/$NUM_TRACKS" "$final_filename"
     
     if [ $? -eq 0 ]; then
         echo "✓ Metadata applied successfully"
